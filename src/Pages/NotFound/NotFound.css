@@ -1,0 +1,36 @@
+.notfound-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-primary, #4c1d95); /* warna utama */
+  color: white;
+  text-align: center;
+}
+
+.notfound-title {
+  font-size: 6rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.notfound-message {
+  font-size: 1.5rem;
+  margin: 10px 0 20px;
+}
+
+.notfound-link {
+  padding: 10px 20px;
+  background: white;
+  color: var(--color-primary, #4c1d95);
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.notfound-link:hover {
+  background: #ddd6fe;
+  color: #1e1b4b;
+}

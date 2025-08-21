@@ -1,0 +1,30 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* fullscreen */
+  background-color: #f9fafb; /* abu-abu terang */
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #3b82f6; /* biru */
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-message {
+  margin-top: 16px;
+  font-size: 16px;
+  color: #374151; /* abu-abu gelap */
+  font-weight: 500;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

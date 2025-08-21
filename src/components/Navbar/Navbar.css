@@ -1,0 +1,78 @@
+.dashboard-sidebar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* === DESKTOP SIDEBAR === */
+.dashboard-sidebar {
+  width: 100px;
+  padding: 1rem 0; /* lebih kecil supaya tidak “tinggi kosong” */
+}
+
+.dashboard-nav {
+  background: #7c4dff;
+  border-radius: 1rem;
+  padding: 1.5rem 0.75rem; /* rapatkan isi */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* jarak antar icon */
+  align-items: center;
+}
+
+.dashboard-nav li {
+  cursor: pointer;
+  font-size: 1.8rem; /* agak lebih besar biar proporsional */
+  color: white;
+  transition: transform 0.2s;
+}
+
+/* === MOBILE NAVBAR === */
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    width: 100%;
+    height: 60px; /* lebih tipis */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    z-index: 1000;
+  }
+
+  .dashboard-nav {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    padding: 0;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* shadow lebih soft */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .dashboard-nav ul {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .dashboard-nav li {
+    font-size: 1.3rem;
+    color: #7c4dff;
+  }
+}

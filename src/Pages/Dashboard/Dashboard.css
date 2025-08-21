@@ -1,0 +1,200 @@
+/* Wrapper utama: full height */
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #faf9fb;
+  flex-direction: row;
+}
+
+/* Konten utama */
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  padding-bottom: 25px;
+  overflow-y: auto;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  flex-direction: column; /* bar atas + judul */
+  margin-bottom: 2rem;
+  align-items: flex-start; /* pastikan semua anak default kiri */
+}
+
+.dashboard-top {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* ProfileMenu tetap kanan */
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dashboard-header h1 {
+  font-size: 20px !important;
+  color: #5b2fd7;
+  text-align: left;   /* pastikan teks kiri */
+  width: 100%;        /* agar text-align berpengaruh */
+}
+
+/* Cards absensi */
+.dashboard-cards {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-cards .card {
+  flex: 1 1 0;
+  background: white;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-cards .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 {
+  font-size: 1rem;
+  color: #7c4dff;
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #111;
+}
+
+/* Tabel absensi bulanan */
+.dashboard-table {
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 2rem;
+  overflow: visible;
+}
+
+.dashboard-table h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.dashboard-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-table th, 
+.dashboard-table td {
+  border: 1px solid #ededed;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.dashboard-table th {
+  background: #7c4dff;
+  color: white;
+  font-weight: 500;
+}
+
+/* Pengumuman */
+.dashboard-pengumuman h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.pengumuman-card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 1rem;
+}
+
+.pengumuman-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.pengumuman-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #7c4dff;
+}
+
+.pengumuman-card button {
+  background: #7c4dff;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.pengumuman-card button:hover {
+  background: #5b2fd7;
+}
+
+.pengumuman-card p {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #111;
+}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+  .dashboard-cards {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
+
+  .dashboard-cards .card {
+    flex: 1 1 20%;
+    min-width: 20%;
+    padding: 0.6rem;
+  }
+
+  .card h2 {
+    font-size: 0.85rem;
+  }
+
+  .card p {
+    font-size: 1.1rem;
+  }
+
+  .dashboard-table table {
+    font-size: 0.85rem;
+  }
+
+  .pengumuman-card {
+    flex-direction: column;
+  }
+
+  .pengumuman-info {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dashboard-header h1 {
+  font-size: 12px !important;
+  color: #5b2fd7;
+}
+}

@@ -1,0 +1,178 @@
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #faf9fb;
+  flex-direction: row;
+}
+
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  padding-bottom: 100px; /* jarak bawah untuk navbar mobile */
+  overflow-y: auto;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dashboard-header h1 {
+  font-size: 25px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #7c4dff;
+  background: white;
+  color: #7c4dff;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.85rem;
+}
+
+.filter-buttons button.active,
+.filter-buttons button:hover {
+  background: #7c4dff;
+  color: white;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Export Buttons Khusus */
+.export-buttons .excel {
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid #28a745; /* hijau */
+  background: white;
+  color: #28a745;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.export-buttons .excel:hover {
+  background: #28a745;
+  color: white;
+}
+
+.export-buttons .pdf {
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid #dc3545; /* merah */
+  background: white;
+  color: #dc3545;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.export-buttons .pdf:hover {
+  background: #dc3545;
+  color: white;
+}
+
+.dashboard-table {
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  overflow: visible;
+}
+
+.table-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.dashboard-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  border: 1px solid #ededed;
+  padding: 0.6rem 0.8rem;
+  text-align: center;
+}
+
+.dashboard-table th {
+  background: #7c4dff;
+  color: white;
+  font-weight: 500;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 0.5rem;
+}
+
+.pagination button {
+  background: #7c4dff;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.pagination button:disabled {
+  background: #d1c4e9;
+  cursor: not-allowed;
+}
+
+.status {
+  display: inline-block;
+  font-weight: 500;
+  font-size: 0.75rem; /* lebih kecil */
+  padding: 2px 6px;
+  border-radius: 50px;
+  text-align: center;
+  min-width: 60px;
+  border: 2px solid;
+  background-color: transparent;
+  color: inherit;
+  margin: 2px 2px;
+}
+
+.status.hadir {
+  border-color: #28a745;
+  color: #28a745;
+}
+
+.status.sakit {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.status.izin {
+  border-color: #ffc107;
+  color: #ffc107;
+}
+
+@media (max-width: 768px) {
+  .dashboard-main {
+    padding-bottom: 80px; /* jarak bawah untuk navbar mobile */
+  }
+}

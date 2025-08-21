@@ -1,0 +1,154 @@
+/* Layout */
+.absensi-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #faf9fb;
+}
+
+.absensi-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.profile-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.absensi-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Form */
+.absensi-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #7c4dff;
+}
+
+/* Error border */
+.input-error {
+  border: 2px solid red !important;
+}
+
+/* Lokasi input + tombol */
+.lokasi-input-wrapper {
+  position: relative;
+  max-width: 100%;
+}
+
+.lokasi-input-wrapper input {
+  width: 100%;
+  padding-right: 3.5rem;
+  box-sizing: border-box;
+}
+
+.lokasi-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  background: #116014;
+  color: white;
+  border: none;
+  border-radius: 0 0.75rem 0.75rem 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.8rem;
+  transition: background 0.2s;
+}
+
+.lokasi-btn:hover {
+  background: #5b2fd7;
+}
+
+/* Jarak + Submit */
+.submit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.distance-out,
+.distance-ok {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.submit-row button {
+  background: #7c4dff;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.submit-row button:hover {
+  background: #5b2fd7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .absensi-main {
+    padding: 1rem;
+  }
+
+  .absensi-form {
+    margin: 0 1rem;
+    width: auto;
+  }
+
+  .lokasi-input-wrapper input {
+    font-size: 0.85rem;
+  }
+
+  .distance-out,
+  .distance-ok {
+    font-size: 0.8rem;
+  }
+}

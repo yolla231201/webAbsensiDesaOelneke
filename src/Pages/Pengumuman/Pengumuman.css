@@ -1,0 +1,43 @@
+.pengumuman-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pengumuman-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: 0.2s;
+}
+
+.pengumuman-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.pengumuman-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.pengumuman-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #7c4dff;
+}
+
+.pengumuman-header span {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.pengumuman-card p {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.4;
+}
