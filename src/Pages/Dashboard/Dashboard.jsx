@@ -103,7 +103,7 @@ const Dashboard = () => {
     // Hitung absensi per user
     const absensiMap = {};
     absensiData.forEach((row) => {
-      const nama = row.profiles?.nama || "Tidak ada nama";
+      const nama = row.profiles?.nama;
       if (!absensiMap[nama]) {
         absensiMap[nama] = { nama, hadir: 0, sakit: 0, izin: 0 };
       }
