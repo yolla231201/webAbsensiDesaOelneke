@@ -4,13 +4,13 @@ import ProfileMenu from "../../components/ProfileMenu/ProfileMenu";
 import { useAuth } from "../../context/AuthContext";
 import { ROLES } from "../../utils/roleUtils";
 import TextType from "./TextType";
-import { supabase } from "../../lib/supabase"; // pastikan supabase client sudah di-setup
+import { supabase } from "../../lib/supabase"; // supabase client
 import "./Dashboard.css";
 
 const Dashboard = () => {
   const { user } = useAuth();
 
-  // State untuk absensi harian, pengumuman, dan absensi bulanan
+  // State
   const [absensiHarian, setAbsensiHarian] = useState({
     hadir: 0,
     sakit: 0,
@@ -29,9 +29,9 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  // --- Fungsi ambil absensi harian ---
+  // --- Ambil absensi harian ---
   const fetchAbsensiHarian = async () => {
-    const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+    const today = new Date().toISOString().split("T")[0];
     const todayStart = today + "T00:00:00Z";
     const todayEnd = today + "T23:59:59Z";
 
@@ -46,7 +46,6 @@ const Dashboard = () => {
       return;
     }
 
-    // Hitung jumlah per status
     const counts = { hadir: 0, sakit: 0, izin: 0 };
     data.forEach((row) => {
       if (row.status === "Hadir") counts.hadir += 1;
@@ -57,7 +56,7 @@ const Dashboard = () => {
     setAbsensiHarian(counts);
   };
 
-  // --- Fungsi ambil pengumuman ---
+  // --- Ambil pengumuman ---
   const fetchPengumuman = async () => {
     const { data, error } = await supabase
       .from("pengumuman")
@@ -72,7 +71,7 @@ const Dashboard = () => {
     setPengumuman(data);
   };
 
-  // --- Fungsi ambil absensi bulanan (khusus Kepala Desa) ---
+  // --- Ambil absensi bulanan (khusus Kepala Desa) ---
   const fetchAbsensiBulanan = async () => {
     const startOfMonth = new Date(
       new Date().getFullYear(),
@@ -89,37 +88,31 @@ const Dashboard = () => {
       .toISOString()
       .split("T")[0];
 
-    // Ambil semua profil
-    const { data: users, error: userError } = await supabase
-      .from("profiles")
-      .select("user_id, nama");
-    if (userError) {
-      console.error("Error fetch profiles:", userError);
-      return;
-    }
-
-    // Ambil semua absensi bulan ini
-    const { data: absensiData, error: absensiError } = await supabase
+    // Join langsung dengan profiles
+    const { data: absensiData, error } = await supabase
       .from("absensi")
-      .select("user_id, status")
+      .select("status, profiles(nama)")
       .gte("waktu_absensi", startOfMonth + "T00:00:00Z")
       .lte("waktu_absensi", endOfMonth + "T23:59:59Z");
 
-    if (absensiError) {
-      console.error("Error fetch absensi bulanan:", absensiError);
+    if (error) {
+      console.error("Error fetch absensi bulanan:", error);
       return;
     }
 
-    // Hitung per user
-    const absensiMap = users.map((u) => {
-      const userAbsensi = absensiData.filter((a) => a.user_id === u.user_id);
-      const hadir = userAbsensi.filter((a) => a.status === "Hadir").length;
-      const sakit = userAbsensi.filter((a) => a.status === "Sakit").length;
-      const izin = userAbsensi.filter((a) => a.status === "Izin").length;
-      return { nama: u.nama, hadir, sakit, izin };
+    // Hitung absensi per user
+    const absensiMap = {};
+    absensiData.forEach((row) => {
+      const nama = row.profiles?.nama || "Tidak ada nama";
+      if (!absensiMap[nama]) {
+        absensiMap[nama] = { nama, hadir: 0, sakit: 0, izin: 0 };
+      }
+      if (row.status === "Hadir") absensiMap[nama].hadir++;
+      else if (row.status === "Sakit") absensiMap[nama].sakit++;
+      else if (row.status === "Izin") absensiMap[nama].izin++;
     });
 
-    setAbsensiBulanan(absensiMap);
+    setAbsensiBulanan(Object.values(absensiMap));
   };
 
   // --- Cards absensi harian ---
