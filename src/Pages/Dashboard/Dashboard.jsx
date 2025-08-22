@@ -4,7 +4,7 @@ import ProfileMenu from "../../components/ProfileMenu/ProfileMenu";
 import { useAuth } from "../../context/AuthContext";
 import { ROLES } from "../../utils/roleUtils";
 import TextType from "./TextType";
-import { supabase } from "../../lib/supabase"; 
+import { supabase } from "../../lib/supabase";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -82,7 +82,7 @@ const Dashboard = () => {
     const absensiMap = {};
     absensiData.forEach((row) => {
       const profile = profiles.find(p => p.user_id === row.user_id);
-      const nama = profile?.nama || "Tidak ada nama";
+      const nama = profile?.nama || "Tidak ada nama"; // fallback jika tidak ditemukan
       if (!absensiMap[nama]) absensiMap[nama] = { nama, hadir: 0, sakit: 0, izin: 0 };
       if (row.status === "Hadir") absensiMap[nama].hadir++;
       else if (row.status === "Sakit") absensiMap[nama].sakit++;
@@ -105,7 +105,12 @@ const Dashboard = () => {
         <header className="dashboard-header">
           <div className="dashboard-top"><ProfileMenu /></div>
           <h1>
-            <TextType text={[`Selamat Datang ${user?.nama}`]} typingSpeed={100} textColors={["#7c4dff"]} showCursor={false}/>
+            <TextType
+              text={[`Selamat Datang ${user?.nama}`]}
+              typingSpeed={100}
+              textColors={["#7c4dff"]}
+              showCursor={false}
+            />
           </h1>
         </header>
 
@@ -167,4 +172,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-          
+    
