@@ -21,6 +21,7 @@ const Dashboard = () => {
     if (user?.role === ROLES.KEPALA_DESA) fetchAbsensiBulanan();
   }, [user]);
 
+  // --- Ambil absensi harian ---
   const fetchAbsensiHarian = async () => {
     const today = new Date().toISOString().split("T")[0];
     const todayStart = today + "T00:00:00Z";
@@ -43,6 +44,7 @@ const Dashboard = () => {
     setAbsensiHarian(counts);
   };
 
+  // --- Ambil pengumuman ---
   const fetchPengumuman = async () => {
     const { data, error } = await supabase
       .from("pengumuman")
@@ -53,25 +55,34 @@ const Dashboard = () => {
     setPengumuman(data);
   };
 
+  // --- Ambil absensi bulanan (khusus Kepala Desa) ---
   const fetchAbsensiBulanan = async () => {
     const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
       .toISOString().split("T")[0];
     const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
       .toISOString().split("T")[0];
 
-    // Ambil absensi + join ke profiles
-    const { data: absensiData, error } = await supabase
+    // Ambil semua absensi bulan ini
+    const { data: absensiData, error: absensiError } = await supabase
       .from("absensi")
-      .select("status, user_id, profiles(nama)")
+      .select("user_id, status")
       .gte("waktu_absensi", startOfMonth + "T00:00:00Z")
       .lte("waktu_absensi", endOfMonth + "T23:59:59Z");
 
-    if (error) return console.error("Error fetch absensi bulanan:", error);
+    if (absensiError) return console.error("Error fetch absensi bulanan:", absensiError);
 
-    // Kelompokkan per user berdasarkan nama
+    // Ambil semua profiles
+    const { data: profiles, error: profileError } = await supabase
+      .from("profiles")
+      .select("user_id, nama");
+
+    if (profileError) return console.error("Error fetch profiles:", profileError);
+
+    // Map absensi ke nama
     const absensiMap = {};
     absensiData.forEach((row) => {
-      const nama = row.profiles?.nama || "Tidak ada nama";
+      const profile = profiles.find(p => p.user_id === row.user_id);
+      const nama = profile?.nama || "Tidak ada nama";
       if (!absensiMap[nama]) absensiMap[nama] = { nama, hadir: 0, sakit: 0, izin: 0 };
       if (row.status === "Hadir") absensiMap[nama].hadir++;
       else if (row.status === "Sakit") absensiMap[nama].sakit++;
@@ -98,6 +109,7 @@ const Dashboard = () => {
           </h1>
         </header>
 
+        {/* Cards Absensi Harian */}
         <section className="dashboard-cards">
           {absensiCards.map((item, idx) => (
             <div className="card" key={idx}>
@@ -107,6 +119,7 @@ const Dashboard = () => {
           ))}
         </section>
 
+        {/* Pengumuman */}
         <section className="dashboard-pengumuman">
           <h2>Pengumuman Terbaru</h2>
           {pengumuman.map((item) => (
@@ -122,6 +135,7 @@ const Dashboard = () => {
           ))}
         </section>
 
+        {/* Tabel Absensi Bulanan (Hanya Kepala Desa) */}
         {user?.role === ROLES.KEPALA_DESA && (
           <section className="dashboard-table">
             <h2>Absensi Bulanan</h2>
@@ -153,3 +167,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+          
