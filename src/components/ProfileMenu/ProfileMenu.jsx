@@ -66,7 +66,7 @@ const ProfileMenu = () => {
             <div className="user-info">
               <p className="user-name">{user?.nama || "Nama User"}</p>
               <p className="user-email">{user?.email || "email@example.com"}</p>
-              <p className="user-role">{user?.role || "Jabatan"}</p>
+              <p className="user-role">{user?.jabatan || "Jabatan"}</p>
             </div>
 
             {/* Menu Tambahan */}
