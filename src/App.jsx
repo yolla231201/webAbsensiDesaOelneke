@@ -7,6 +7,9 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import AbsenHarian from "./Pages/AbsenHarian/AbsenHarian";
 import RiwayatAbsen from "./Pages/RiwayatAbsen/RiwayatAbsen";
 import Pengumuman from "./Pages/Pengumuman/Pengumuman";
+import Pengaturan from "./Pages/Pengaturan/Pengaturan";
+import EditProfil from "./Pages/EditProfil/EditProfil"
+import BuatPengumuman from "./Pages/BuatPengumuman/BuatPengumuman";
 import NotFound from "./Pages/NotFound/NotFound";
 import { ROLES } from "./utils/roleUtils";
 
@@ -34,6 +37,10 @@ function App() {
             <Route path="/absen-harian" element={<AbsenHarian />} />
             <Route path="/riwayat-absen" element={<RiwayatAbsen />} />
             <Route path="/pengumuman" element={<Pengumuman />} />
+            <Route path="/pengaturan" element={<Pengaturan />} />
+            <Route path="/edit-profil" element={<EditProfil />} />
+            <Route path="/buat-pengumuman" element={<BuatPengumuman />} />
+
           </Route>
 
           {/* 404 fallback */}

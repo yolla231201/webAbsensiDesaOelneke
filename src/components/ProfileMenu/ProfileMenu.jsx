@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaCog, FaUserEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import RotatingText from "./RotatingText"; // pastikan import RotatingText
+import RotatingText from "./RotatingText";
 import "./ProfileMenu.css";
-import userPlaceholder from "../../assets/Logo_Kementerian.png"; // gambar sementara
-import appLogo from "../../assets/dinas_ttu.png"; // logo aplikasi
+import userPlaceholder from "../../assets/Logo_Kementerian.png";
+import appLogo from "../../assets/dinas_ttu.png";
 
 const ProfileMenu = () => {
   const { user, logout } = useAuth();
@@ -33,7 +33,7 @@ const ProfileMenu = () => {
     <div className="profile-menu">
       {/* Logo + Desa */}
       <div className="app-logo-wrapper">
-        
+        <img src={appLogo} alt="Logo App" className="app-logo" />
         <div className="desa-wrapper">
           <span className="desa-static">Desa</span>
           <RotatingText
@@ -68,6 +68,46 @@ const ProfileMenu = () => {
               <p className="user-email">{user?.email || "email@example.com"}</p>
               <p className="user-role">{user?.role || "Jabatan"}</p>
             </div>
+
+            {/* Menu Tambahan */}
+            <div className="dropdown-menu">
+              {user?.role === "kepala_desa" && (
+                <button
+                  className="dropdown-item"
+                  onClick={() => {
+                    navigate("/pengaturan");
+                    setIsOpen(false);
+                  }}
+                >
+                  <FaCog /> Pengaturan
+                </button>
+              )}
+
+              <button
+                className="dropdown-item"
+                onClick={() => {
+                  navigate("/edit-profil");
+                  setIsOpen(false);
+                }}
+              >
+                <FaUserEdit /> Edit Profil
+              </button>
+
+              {/* Tombol Buat Pengumuman untuk kepala desa */}
+              {user?.role === "kepala_desa" && (
+                <button
+                  className="dropdown-item"
+                  onClick={() => {
+                    navigate("/buat-pengumuman");
+                    setIsOpen(false);
+                  }}
+                >
+                  📝 Buat Pengumuman
+                </button>
+              )}
+            </div>
+
+            {/* Logout */}
             <button className="logout-btn" onClick={handleLogout}>
               <FaSignOutAlt /> Logout
             </button>

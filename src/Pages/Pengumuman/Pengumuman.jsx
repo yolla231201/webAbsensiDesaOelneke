@@ -16,8 +16,7 @@ const Pengumuman = () => {
         const { data, error } = await supabase
           .from("pengumuman")
           .select("*")
-          .order("tanggal", { ascending: false }); // terbaru dulu
-
+          .order("tanggal", { ascending: false });
         if (error) throw error;
         setPengumuman(data);
       } catch (err) {
@@ -27,20 +26,22 @@ const Pengumuman = () => {
         setLoading(false);
       }
     };
-
     fetchPengumuman();
   }, []);
 
   return (
-    <div className="dashboard-wrapper">
+    <div className="pengumuman-wrapper">
       <Navbar />
-      <main className="dashboard-main">
-        <header className="dashboard-header">
-          <h1>Pengumuman Desa</h1>
-          <ProfileMenu />
+      <main className="pengumuman-main">
+        <header className="pengumuman-header-wrapper">
+          <div className="pengumuman-top">
+            <ProfileMenu />
+          </div>
         </header>
 
-        {message && <div className="alert">{message}</div>}
+        <h1 className="pengumuman-title">Pengumuman</h1>
+
+        {message && <div className="pengumuman-alert">{message}</div>}
 
         <div className="pengumuman-list">
           {loading ? (
@@ -50,7 +51,7 @@ const Pengumuman = () => {
           ) : (
             pengumuman.map((item, idx) => (
               <div className="pengumuman-card" key={idx}>
-                <div className="pengumuman-header">
+                <div className="pengumuman-card-header">
                   <h3>{item.judul}</h3>
                   <span>
                     {new Date(item.tanggal).toLocaleDateString("id-ID")}

@@ -34,11 +34,12 @@
   margin-bottom: 1rem;
 }
 
-.dashboard-header h1 {
-  font-size: 20px !important;
+.dashboard-title {
+  font-size: 1rem;
   color: #5b2fd7;
-  text-align: left;   /* pastikan teks kiri */
-  width: 100%;        /* agar text-align berpengaruh */
+  text-align: left;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 /* Cards absensi */
@@ -81,14 +82,14 @@
   background: white;
   padding: 1rem;
   border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-bottom: 2rem;
   overflow: visible;
 }
 
 .dashboard-table h2 {
-  margin-bottom: 1rem;
-  color: #333;
+  font-size: 0.9rem;
+  color: #7c4dff;
 }
 
 .dashboard-table table {
@@ -96,7 +97,7 @@
   border-collapse: collapse;
 }
 
-.dashboard-table th, 
+.dashboard-table th,
 .dashboard-table td {
   border: 1px solid #ededed;
   padding: 0.8rem;
@@ -106,13 +107,13 @@
 .dashboard-table th {
   background: #7c4dff;
   color: white;
-  font-weight: 500;
+  font-weight: 200;
 }
 
 /* Pengumuman */
 .dashboard-pengumuman h2 {
-  margin-bottom: 1rem;
-  color: #333;
+  font-size: 0.8rem;
+  color: #7c4dff;
 }
 
 .pengumuman-card {
@@ -121,7 +122,7 @@
   background: white;
   padding: 1rem;
   border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-bottom: 1rem;
 }
 
@@ -150,7 +151,7 @@
 }
 
 .pengumuman-card button:hover {
-  background: #5b2fd7;
+  background: #5c38bd;
 }
 
 .pengumuman-card p {
@@ -159,42 +160,22 @@
   color: #111;
 }
 
-/* Responsive Mobile */
+/* Responsive */
 @media (max-width: 768px) {
-  .dashboard-cards {
-    flex-wrap: nowrap;
-    gap: 0.5rem;
+  .dashboard-main {
+    padding-bottom: 80px;
   }
-
+  .dashboard-table th,
+  .dashboard-table td {
+    font-size: 0.7rem;
+  }
   .dashboard-cards .card {
-    flex: 1 1 20%;
-    min-width: 20%;
-    padding: 0.6rem;
+    padding: 0.8rem;
   }
-
-  .card h2 {
-    font-size: 0.85rem;
+  .dashboard-cards .card h2{
+    font-size: 0.6rem;
   }
-
-  .card p {
-    font-size: 1.1rem;
+  .dashboard-cards .card p {
+    font-size: 0.8rem;
   }
-
-  .dashboard-table table {
-    font-size: 0.85rem;
-  }
-
-  .pengumuman-card {
-    flex-direction: column;
-  }
-
-  .pengumuman-info {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .dashboard-header h1 {
-  font-size: 12px !important;
-  color: #5b2fd7;
-}
 }

@@ -34,3 +34,17 @@
   background: #ddd6fe;
   color: #1e1b4b;
 }
+
+
+@media (max-width: 768px) {
+  .notfound-container h1{
+    font-size: 2rem;
+  }
+  .notfound-container p{
+    font-size: 0.8rem;
+  }
+  .notfound-link {
+  background: white;
+  font-size: 0.8rem;
+}
+}

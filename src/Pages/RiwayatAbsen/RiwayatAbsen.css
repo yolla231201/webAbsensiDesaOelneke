@@ -1,11 +1,11 @@
-.dashboard-wrapper {
+.riwayat-absen-wrapper {
   display: flex;
   min-height: 100vh;
   background: #faf9fb;
   flex-direction: row;
 }
 
-.dashboard-main {
+.riwayat-absen-main {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -16,24 +16,38 @@
   box-sizing: border-box;
 }
 
-.dashboard-header {
+.riwayat-absen-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+
+.riwayat-absen-top {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.dashboard-header h1 {
-  font-size: 25px;
+/* Judul halaman */
+.riwayat-absen-title {
+  font-size: 20px;
+  color: #7c4dff;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
-.filter-buttons {
+/* Filter buttons */
+.riwayat-absen-filter-buttons {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.filter-buttons button {
+.riwayat-absen-filter-buttons button {
   padding: 0.5rem 1rem;
   border-radius: 0.75rem;
   border: 1px solid #7c4dff;
@@ -44,20 +58,20 @@
   font-size: 0.85rem;
 }
 
-.filter-buttons button.active,
-.filter-buttons button:hover {
+.riwayat-absen-filter-buttons button.active,
+.riwayat-absen-filter-buttons button:hover {
   background: #7c4dff;
   color: white;
 }
 
-.export-buttons {
+/* Export Buttons */
+.riwayat-absen-export-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.7rem;
   margin-bottom: 1rem;
 }
 
-/* Export Buttons Khusus */
-.export-buttons .excel {
+.riwayat-absen-export-buttons .excel {
   padding: 0.4rem 0.8rem;
   border-radius: 0.5rem;
   border: 1px solid #28a745; /* hijau */
@@ -67,12 +81,12 @@
   transition: 0.2s;
 }
 
-.export-buttons .excel:hover {
+.riwayat-absen-export-buttons .excel:hover {
   background: #28a745;
   color: white;
 }
 
-.export-buttons .pdf {
+.riwayat-absen-export-buttons .pdf {
   padding: 0.4rem 0.8rem;
   border-radius: 0.5rem;
   border: 1px solid #dc3545; /* merah */
@@ -82,12 +96,13 @@
   transition: 0.2s;
 }
 
-.export-buttons .pdf:hover {
+.riwayat-absen-export-buttons .pdf:hover {
   background: #dc3545;
   color: white;
 }
 
-.dashboard-table {
+/* Table container */
+.riwayat-absen-table-container {
   background: white;
   padding: 1rem;
   border-radius: 1rem;
@@ -95,31 +110,38 @@
   overflow: visible;
 }
 
-.table-title {
-  font-size: 1.2rem;
-  font-weight: bold;
+.riwayat-absen-table-title {
+  font-size: 1rem;
+  font-weight: 600;
   margin-bottom: 10px;
+  color: #7c4dff;
 }
 
-.dashboard-table table {
+.riwayat-absen-table-responsive {
+  overflow-x: auto;
+}
+
+.riwayat-absen-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.dashboard-table th,
-.dashboard-table td {
+.riwayat-absen-table th,
+.riwayat-absen-table td {
   border: 1px solid #ededed;
   padding: 0.6rem 0.8rem;
+  font-size: 1rem;
   text-align: center;
 }
 
-.dashboard-table th {
+.riwayat-absen-table th {
   background: #7c4dff;
   color: white;
   font-weight: 500;
 }
 
-.pagination {
+/* Pagination */
+.riwayat-absen-pagination {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -127,7 +149,7 @@
   gap: 0.5rem;
 }
 
-.pagination button {
+.riwayat-absen-pagination button {
   background: #7c4dff;
   color: white;
   border: none;
@@ -137,11 +159,12 @@
   font-size: 0.85rem;
 }
 
-.pagination button:disabled {
+.riwayat-absen-pagination button:disabled {
   background: #d1c4e9;
   cursor: not-allowed;
 }
 
+/* Status badges (dipakai di kolom status) */
 .status {
   display: inline-block;
   font-weight: 500;
@@ -149,7 +172,7 @@
   padding: 2px 6px;
   border-radius: 50px;
   text-align: center;
-  min-width: 60px;
+  min-width: 40px;
   border: 2px solid;
   background-color: transparent;
   color: inherit;
@@ -171,8 +194,63 @@
   color: #ffc107;
 }
 
+/* Empty card */
+.riwayat-absen-empty-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 5px;
+  text-align: center;
+  font-size: 15px;
+  color: #666;
+}
+.riwayat-absen-empty-card p {
+  font-size: 1rem;
+}
+
+/* Message / Alert */
+.riwayat-absen-alert {
+  margin-bottom: 1rem;
+  color: #b00020;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .dashboard-main {
+  .riwayat-absen-main {
     padding-bottom: 80px; /* jarak bawah untuk navbar mobile */
   }
+  .riwayat-absen-table-title{
+    font-size: 0.8rem;
+  }
+  .riwayat-absen-filter-buttons button{
+    font-size: 0.6rem;
+  }
+  .riwayat-absen-export-buttons button {
+    font-size: 0.6rem;
+  }
+
+  .riwayat-absen-table th,
+  .riwayat-absen-table td {
+    font-size: 0.7rem;
+  }
+  .riwayat-absen-title {
+    font-size: 1rem;
+  }
+  .riwayat-absen-empty-card p {
+    font-size: 0.8rem;
+  }
+  .status {
+  font-size: 0.6rem; /* lebih kecil */
+  padding: 2px 6px;
+  min-width: 30px;
+  border: 2px solid;
+  background-color: transparent;
+  color: inherit;
+  margin: 2px 2px;
+  }
+  .riwayat-absen-table-container p{
+    font-size: 0.7rem;
+    color: #7c4dff;
+  }
+  
 }

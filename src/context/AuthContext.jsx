@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-import Loading from "../components/Loading/Loading"; // <-- import komponen loading
+import Loading from "../components/Loading/Loading";
 
 const AuthContext = createContext();
 
@@ -19,20 +19,29 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (error) throw error;
 
+      // Cari profil user
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("role, nama, jabatan")
         .eq("user_id", data.user.id)
-        .single();
+        .maybeSingle();
 
       if (profileError) throw profileError;
+      if (!profile) throw new Error("Akun ini belum terdaftar di sistem desa.");
 
       const fullUser = { ...data.user, ...profile };
       setUser(fullUser);
       localStorage.setItem("user", JSON.stringify(fullUser));
+
+      return { data: { user: data.user, profile }, error: null };
+    } catch (err) {
+      return { data: null, error: err };
     } finally {
       setLoading(false);
     }
@@ -44,13 +53,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
   };
 
-  // ⬇⬇ loading screen saat inisialisasi
   if (loading) {
     return <Loading message="Menyiapkan aplikasi..." />;
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );

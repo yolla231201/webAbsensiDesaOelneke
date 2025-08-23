@@ -54,20 +54,39 @@ const Dashboard = () => {
     if (error) return console.error("Error fetch pengumuman:", error);
     setPengumuman(data);
   };
-
   // --- Ambil absensi bulanan (khusus Kepala Desa) ---
   const fetchAbsensiBulanan = async () => {
     const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
       .toISOString().split("T")[0];
     const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
       .toISOString().split("T")[0];
+  // --- Fungsi ambil absensi bulanan (khusus Kepala Desa) ---
+  // --- Fungsi ambil absensi bulanan (khusus Kepala Desa) ---
+const fetchAbsensiBulanan = async () => {
+  const startOfMonth = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    1
+  )
+    .toISOString()
+    .split("T")[0];
+  const endOfMonth = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    0
+  )
+    .toISOString()
+    .split("T")[0];
 
-    // Ambil semua absensi bulan ini
-    const { data: absensiData, error: absensiError } = await supabase
-      .from("absensi")
-      .select("user_id, status")
-      .gte("waktu_absensi", startOfMonth + "T00:00:00Z")
-      .lte("waktu_absensi", endOfMonth + "T23:59:59Z");
+  // Ambil semua profil (semua user)
+  const { data: users, error: userError } = await supabase
+    .from("profiles")
+    .select("user_id, nama");
+
+  if (userError) {
+    console.error("Error fetch profiles:", userError);
+    return;
+  }
 
     if (absensiError) return console.error("Error fetch absensi bulanan:", absensiError);
 
@@ -91,6 +110,29 @@ const Dashboard = () => {
 
     setAbsensiBulanan(Object.values(absensiMap));
   };
+  // Ambil semua absensi bulan ini (tanpa filter user_id)
+  const { data: absensiData, error: absensiError } = await supabase
+    .from("absensi")
+    .select("user_id, status")
+    .gte("waktu_absensi", startOfMonth + "T00:00:00Z")
+    .lte("waktu_absensi", endOfMonth + "T23:59:59Z");
+
+  if (absensiError) {
+    console.error("Error fetch absensi bulanan:", absensiError);
+    return;
+  }
+
+  // Hitung rekap per user
+  const absensiMap = users.map((u) => {
+    const userAbsensi = absensiData.filter((a) => a.user_id === u.user_id);
+    const hadir = userAbsensi.filter((a) => a.status === "Hadir").length;
+    const sakit = userAbsensi.filter((a) => a.status === "Sakit").length;
+    const izin = userAbsensi.filter((a) => a.status === "Izin").length;
+    return { nama: u.nama, hadir, sakit, izin };
+  });
+
+  setAbsensiBulanan(absensiMap);
+};
 
   const absensiCards = [
     { title: "Hadir", count: absensiHarian.hadir },
@@ -104,7 +146,13 @@ const Dashboard = () => {
       <main className="dashboard-main">
         <header className="dashboard-header">
           <div className="dashboard-top"><ProfileMenu /></div>
-          <h1>
+          <div className="dashboard-top">
+            <ProfileMenu />
+          </div>
+          
+        </header>
+
+        <h1 className="dashboard-title">
             <TextType
               text={[`Selamat Datang ${user?.nama}`]}
               typingSpeed={100}
@@ -112,7 +160,6 @@ const Dashboard = () => {
               showCursor={false}
             />
           </h1>
-        </header>
 
         {/* Cards Absensi Harian */}
         <section className="dashboard-cards">
@@ -143,7 +190,7 @@ const Dashboard = () => {
         {/* Tabel Absensi Bulanan (Hanya Kepala Desa) */}
         {user?.role === ROLES.KEPALA_DESA && (
           <section className="dashboard-table">
-            <h2>Absensi Bulanan</h2>
+            <h2>Absensi Bulan ini </h2>
             <table>
               <thead>
                 <tr>

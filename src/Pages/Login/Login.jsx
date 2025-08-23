@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../assets/style.css";
 import "./Login.css";
 import Logo from "../../assets/dinas_ttu.png";
 import { IoMdEye, IoIosEyeOff } from "react-icons/io";
+import Loading from "../../components/Loading/Loading";
 
 const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, setUser } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // 👈 untuk toggle mata
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
 
@@ -25,9 +26,17 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await login(email, password);
+      const { data, error } = await login(email, password);
+      if (error) throw error;
+      if (!data?.profile) {
+        throw new Error("Akun ini belum terdaftar di sistem desa. Hubungi Kepala Desa.");
+      }
+
+      const fullUser = { ...data.user, ...data.profile };
+      setUser(fullUser);
       navigate("/dashboard");
     } catch (err) {
+      console.error(err);
       showToast(err.message || "Login gagal. Cek email dan password.");
     } finally {
       setLoading(false);
@@ -37,18 +46,11 @@ const LoginPage = () => {
   return (
     <div className="login-wrapper">
       <div className="login-container">
-        {/* Left side */}
         <div className="login-left">
           <img src={Logo} alt="Logo" className="login-logo" />
           <h1 className="login-left-title">Pemerintah Desa Oelneke</h1>
-          <img
-            src="https://storage.googleapis.com/a1aa/image/03a2d57d-4756-44a0-dc91-8cad9a8196ac.jpg"
-            alt=""
-            className="left-bg"
-          />
         </div>
 
-        {/* Right side */}
         <div className="login-right">
           <h2 className="login-title">Login</h2>
           <p className="login-subtitle">
@@ -57,25 +59,22 @@ const LoginPage = () => {
 
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="input-group">
-              <label htmlFor="username">Email</label>
+              <label>Email</label>
               <input
-                id="username"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Masukkan email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
 
-            {/* Password dengan toggle mata */}
             <div className="input-group password-group">
-              <label htmlFor="password">Password</label>
+              <label>Password</label>
               <div className="password-wrapper">
                 <input
-                  id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder="Masukkan password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -89,46 +88,14 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <div className="flex-between">
-              <button type="button" className="forgot-password">
-                Lupa Password?
-              </button>
-            </div>
             <button type="submit" className="login-btn" disabled={loading}>
-              {loading ? "Loading..." : "Login"}
+              {loading ? <Loading /> : "Login"}
             </button>
           </form>
 
-          <p className="signup-text">
-            Belum punya akun?{" "}
-            <button
-              className="signup-btn-link"
-              onClick={() => navigate("/signup")}
-            >
-              Daftar
-            </button>
-          </p>
+          {toast && <div className="toast">{toast}</div>}
         </div>
       </div>
-
-      {/* Toast notification */}
-      {toast && (
-        <div
-          style={{
-            position: "fixed",
-            top: "1rem",
-            right: "1rem",
-            background: "#f56565",
-            color: "#fff",
-            padding: "1rem",
-            borderRadius: "0.5rem",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-            zIndex: 1000,
-          }}
-        >
-          {toast}
-        </div>
-      )}
     </div>
   );
 };

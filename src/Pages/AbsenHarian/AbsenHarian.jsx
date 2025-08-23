@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import ProfileMenu from "../../components/ProfileMenu/ProfileMenu";
 import { FiMapPin } from "react-icons/fi";
-import "./AbsenHarian.css";
 import Alert from "../../components/Alert/Alert";
 import { supabase } from "../../lib/supabase";
+import "./AbsenHarian.css";
 
 const AbsensiHarian = () => {
   const [status, setStatus] = useState("Hadir");
@@ -20,7 +20,6 @@ const AbsensiHarian = () => {
   const [canEdit, setCanEdit] = useState(false);
   const [authUser, setAuthUser] = useState(null);
 
-  // Ambil user auth Supabase
   useEffect(() => {
     const fetchAuthUser = async () => {
       const { data } = await supabase.auth.getUser();
@@ -29,25 +28,23 @@ const AbsensiHarian = () => {
     fetchAuthUser();
   }, []);
 
-  // Ambil pengaturan
   useEffect(() => {
     const fetchPengaturan = async () => {
-      const { data, error } = await supabase
+      const { data: pengaturan, error } = await supabase
         .from("pengaturan")
         .select("*")
-        .limit(1)
-        .single();
+        .eq("id", 1)
+        .single(); // ganti single() dengan maybeSingle()
       if (error) setMessage("⚠️ Gagal mengambil pengaturan: " + error.message);
-      else setPengaturan(data);
+      else setPengaturan(pengaturan);
     };
     fetchPengaturan();
   }, []);
 
-  // Cek absensi hari ini
   useEffect(() => {
     const fetchTodayAbsensi = async () => {
       if (!authUser) return;
-      const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+      const today = new Date().toISOString().split("T")[0];
       const { data, error } = await supabase
         .from("absensi")
         .select("*")
@@ -62,7 +59,6 @@ const AbsensiHarian = () => {
     fetchTodayAbsensi();
   }, [authUser]);
 
-  // Tentukan apakah form bisa edit/disable
   useEffect(() => {
     if (!pengaturan) return;
     const now = new Date();
@@ -75,12 +71,9 @@ const AbsensiHarian = () => {
     startTime.setHours(hStart, mStart, sStart, 0);
     const endTime = new Date();
     endTime.setHours(hEnd, mEnd, sEnd, 0);
-
-    // handle midnight crossover
     if (endTime < startTime) endTime.setDate(endTime.getDate() + 1);
 
     if (todayAbsensi) {
-      // sudah absen hari ini
       setStatus(todayAbsensi.status);
       setKeterangan(todayAbsensi.keterangan || "");
       if (now >= startTime && now <= endTime) {
@@ -91,7 +84,6 @@ const AbsensiHarian = () => {
         setFormDisabled(true);
       }
     } else {
-      // belum absen
       if (now >= startTime && now <= endTime) {
         setFormDisabled(false);
       } else {
@@ -151,7 +143,7 @@ const AbsensiHarian = () => {
       return;
     }
 
-    if (distance > pengaturan.max_jarak) {
+    if (distance > pengaturan?.max_jarak) {
       setMessage("⚠️ Jarak terlalu jauh, pindah lokasi dulu!");
       return;
     }
@@ -168,7 +160,6 @@ const AbsensiHarian = () => {
 
     try {
       if (todayAbsensi && canEdit) {
-        // update
         const { data, error } = await supabase
           .from("absensi")
           .update({
@@ -179,12 +170,10 @@ const AbsensiHarian = () => {
           .eq("id", todayAbsensi.id)
           .select();
 
-
         if (error) throw error;
         setMessage("✅ Absensi berhasil diperbarui!");
-        setTodayAbsensi(data[0]); // update state langsung
+        setTodayAbsensi(data[0]);
       } else if (!todayAbsensi) {
-        // insert
         const { data, error } = await supabase
           .from("absensi")
           .insert([
@@ -195,10 +184,10 @@ const AbsensiHarian = () => {
               waktu_absensi: new Date().toISOString(),
             },
           ])
-          .select(); // gunakan select() agar data baru dikembalikan
+          .select();
         if (error) throw error;
         setMessage("✅ Absensi berhasil dikirim!");
-        setTodayAbsensi(data[0]); // simpan data baru di state
+        setTodayAbsensi(data[0]);
       } else {
         setMessage(
           "⚠️ Waktu edit absensi sudah lewat, tidak bisa mengubah data."
@@ -217,9 +206,12 @@ const AbsensiHarian = () => {
     <div className="absensi-wrapper">
       <Navbar />
       <main className="absensi-main">
-        <div className="profile-section">
-          <ProfileMenu />
-        </div>
+        <header className="absensi-header">
+          <div className="absensi-top">
+            <ProfileMenu />
+          </div>
+        </header>
+
         <h1 className="absensi-title">Absensi Harian</h1>
 
         {message && (
@@ -231,19 +223,6 @@ const AbsensiHarian = () => {
         )}
 
         <form className="absensi-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Status</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              disabled={formDisabled}
-            >
-              <option value="Hadir">Hadir</option>
-              <option value="Sakit">Sakit</option>
-              <option value="Izin">Izin</option>
-            </select>
-          </div>
-
           {(status === "Sakit" || status === "Izin") && (
             <div className="form-group">
               <label>Keterangan</label>
@@ -257,6 +236,19 @@ const AbsensiHarian = () => {
               />
             </div>
           )}
+
+          <div className="form-group">
+            <label>Status</label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              disabled={formDisabled}
+            >
+              <option value="Hadir">Hadir</option>
+              <option value="Sakit">Sakit</option>
+              <option value="Izin">Izin</option>
+            </select>
+          </div>
 
           <div className="form-group">
             <label>Lokasi Saat Ini</label>
