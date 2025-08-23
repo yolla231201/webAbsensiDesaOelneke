@@ -10,7 +10,11 @@ import "./Dashboard.css";
 const Dashboard = () => {
   const { user } = useAuth();
 
-  const [absensiHarian, setAbsensiHarian] = useState({ hadir: 0, sakit: 0, izin: 0 });
+  const [absensiHarian, setAbsensiHarian] = useState({
+    hadir: 0,
+    sakit: 0,
+    izin: 0,
+  });
   const [pengumuman, setPengumuman] = useState([]);
   const [absensiBulanan, setAbsensiBulanan] = useState([]);
   const [lihatDetailId, setLihatDetailId] = useState(null);
@@ -56,29 +60,12 @@ const Dashboard = () => {
   };
   // --- Ambil absensi bulanan (khusus Kepala Desa) ---
   const fetchAbsensiBulanan = async () => {
-    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-      .toISOString().split("T")[0];
-    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
-      .toISOString().split("T")[0];
-  // --- Fungsi ambil absensi bulanan (khusus Kepala Desa) ---
-  // --- Fungsi ambil absensi bulanan (khusus Kepala Desa) ---
-const fetchAbsensiBulanan = async () => {
-  const startOfMonth = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    1
-  )
-    .toISOString()
-    .split("T")[0];
-  const endOfMonth = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth() + 1,
-    0
-  )
-    .toISOString()
-    .split("T")[0];
+  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+    .toISOString().split("T")[0];
+  const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
+    .toISOString().split("T")[0];
 
-  // Ambil semua profil (semua user)
+  // Ambil semua profiles
   const { data: users, error: userError } = await supabase
     .from("profiles")
     .select("user_id, nama");
@@ -88,29 +75,7 @@ const fetchAbsensiBulanan = async () => {
     return;
   }
 
-    if (absensiError) return console.error("Error fetch absensi bulanan:", absensiError);
-
-    // Ambil semua profiles
-    const { data: profiles, error: profileError } = await supabase
-      .from("profiles")
-      .select("user_id, nama");
-
-    if (profileError) return console.error("Error fetch profiles:", profileError);
-
-    // Map absensi ke nama
-    const absensiMap = {};
-    absensiData.forEach((row) => {
-      const profile = profiles.find(p => p.user_id === row.user_id);
-      const nama = profile?.nama || "Tidak ada nama"; // fallback jika tidak ditemukan
-      if (!absensiMap[nama]) absensiMap[nama] = { nama, hadir: 0, sakit: 0, izin: 0 };
-      if (row.status === "Hadir") absensiMap[nama].hadir++;
-      else if (row.status === "Sakit") absensiMap[nama].sakit++;
-      else if (row.status === "Izin") absensiMap[nama].izin++;
-    });
-
-    setAbsensiBulanan(Object.values(absensiMap));
-  };
-  // Ambil semua absensi bulan ini (tanpa filter user_id)
+  // Ambil semua absensi bulan ini
   const { data: absensiData, error: absensiError } = await supabase
     .from("absensi")
     .select("user_id, status")
@@ -122,13 +87,14 @@ const fetchAbsensiBulanan = async () => {
     return;
   }
 
-  // Hitung rekap per user
   const absensiMap = users.map((u) => {
     const userAbsensi = absensiData.filter((a) => a.user_id === u.user_id);
-    const hadir = userAbsensi.filter((a) => a.status === "Hadir").length;
-    const sakit = userAbsensi.filter((a) => a.status === "Sakit").length;
-    const izin = userAbsensi.filter((a) => a.status === "Izin").length;
-    return { nama: u.nama, hadir, sakit, izin };
+    return {
+      nama: u.nama,
+      hadir: userAbsensi.filter(a => a.status === "Hadir").length,
+      sakit: userAbsensi.filter(a => a.status === "Sakit").length,
+      izin: userAbsensi.filter(a => a.status === "Izin").length
+    };
   });
 
   setAbsensiBulanan(absensiMap);
@@ -145,21 +111,19 @@ const fetchAbsensiBulanan = async () => {
       <Navbar />
       <main className="dashboard-main">
         <header className="dashboard-header">
-          <div className="dashboard-top"><ProfileMenu /></div>
           <div className="dashboard-top">
             <ProfileMenu />
           </div>
-          
         </header>
 
         <h1 className="dashboard-title">
-            <TextType
-              text={[`Selamat Datang ${user?.nama}`]}
-              typingSpeed={100}
-              textColors={["#7c4dff"]}
-              showCursor={false}
-            />
-          </h1>
+          <TextType
+            text={[`Selamat Datang ${user?.nama}`]}
+            typingSpeed={100}
+            textColors={["#7c4dff"]}
+            showCursor={false}
+          />
+        </h1>
 
         {/* Cards Absensi Harian */}
         <section className="dashboard-cards">
@@ -178,7 +142,11 @@ const fetchAbsensiBulanan = async () => {
             <div className="pengumuman-card" key={item.id}>
               <div className="pengumuman-info">
                 <h3>{item.judul}</h3>
-                <button onClick={() => setLihatDetailId(lihatDetailId === item.id ? null : item.id)}>
+                <button
+                  onClick={() =>
+                    setLihatDetailId(lihatDetailId === item.id ? null : item.id)
+                  }
+                >
                   {lihatDetailId === item.id ? "Tutup" : "Lihat"}
                 </button>
               </div>
@@ -219,4 +187,3 @@ const fetchAbsensiBulanan = async () => {
 };
 
 export default Dashboard;
-      
